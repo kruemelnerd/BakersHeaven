@@ -23,7 +23,6 @@
                 android:layout_height="100dp"
                 android:adjustViewBounds="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
                 android:backgroundTint="@color/cardview_background_color"/>
 
             <TextView
