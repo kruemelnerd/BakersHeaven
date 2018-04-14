@@ -18,7 +18,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".detail.DetailActivity" />
+
+        <activity
+            android:name=".detail.DetailActivity"
+            android:label="@string/title_detailActivity"
+            android:parentActivityName=".overview.OverviewActivity">
+            <!-- The meta-data element is needed for versions lower than 4.1 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".overview.OverviewActivity" />
+        </activity>
     </application>
 
 </manifest>

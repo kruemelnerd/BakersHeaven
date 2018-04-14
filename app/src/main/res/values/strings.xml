@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">BakersHeaven</string>
-
+    <string name="title_detailActivity">Recipe</string>
     <string name="detail_serving_label">Servings</string>
     <string name="detail_ingredients_number_label">Ingredients</string>
+
+
 </resources>
