@@ -22,20 +22,27 @@ public class OverviewRecyclerViewAdapter extends RecyclerView.Adapter<OverviewRe
 
 
     public interface OnItemClickListener {
-        void onItemClick(int position, Recipe recipe);
+        void onItemClick(int position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         public TextView title;
         public ImageView image;
+        public int recipeId;
 
         public ViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.overview_recipe_title);
             image = itemView.findViewById(R.id.overview_recipe_thumbnail);
+
+            itemView.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            listener.onItemClick(recipeId);
+        }
     }
 
     private Context mContext;
@@ -60,6 +67,7 @@ public class OverviewRecyclerViewAdapter extends RecyclerView.Adapter<OverviewRe
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final int adapterPosition = holder.getAdapterPosition();
         final Recipe recipe = recipeList.get(adapterPosition);
+        holder.recipeId = recipe.getId();
         holder.title.setText(recipe.getName());
         String imageUrl = recipe.getImage();
         if (imageUrl == null || imageUrl.length() == 0) {

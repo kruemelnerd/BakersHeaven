@@ -23,7 +23,7 @@ public class BakeryRepository {
         this.mContext = context;
     }
 
-    public static BakeryRepository getInstance(Context context) {
+    public static BakeryRepository getInstance(final Context context) {
         if (INSTANCE == null) {
             INSTANCE = new BakeryRepository(context);
         }
@@ -39,6 +39,39 @@ public class BakeryRepository {
                 List<Recipe> allRecipes = response.body();
                 if (allRecipes != null && !allRecipes.isEmpty()) {
                     callback.onRecipesLoaded(allRecipes);
+                } else {
+                    callback.onDataNotAvailable();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Recipe>> call, Throwable t) {
+                Timber.e(t);
+                callback.onDataNotAvailable();
+            }
+        });
+    }
+
+    /**
+     * If this would be a nicer API you would call for just an single Recipe
+     *
+     * @param callback
+     */
+    public void getRecipe(final int recipeId, final BakeryDataSource.LoadSingleRecipeCallback callback) {
+        Call<List<Recipe>> call = BakeryService.getApi().getAllRecipes();
+        call.enqueue(new Callback<List<Recipe>>() {
+            @Override
+            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+                List<Recipe> allRecipes = response.body();
+                if (allRecipes != null && !allRecipes.isEmpty()) {
+                    for (Recipe recipe :
+                            allRecipes) {
+                        if (recipeId == recipe.getId()) {
+                            callback.onRecipeLoaded(recipe);
+                            return;
+                        }
+                    }
+                    callback.onDataNotAvailable();
                 } else {
                     callback.onDataNotAvailable();
                 }

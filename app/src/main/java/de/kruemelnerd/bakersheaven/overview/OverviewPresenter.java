@@ -1,6 +1,5 @@
 package de.kruemelnerd.bakersheaven.overview;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.kruemelnerd.bakersheaven.data.Recipe;
@@ -27,16 +26,23 @@ public class OverviewPresenter implements OverviewContract.PresenterOps{
 
     @Override
     public void loadRecipes() {
-
-
         mRepository.getRecipes(new BakeryOverviewCallback());
-        Recipe recipe = new Recipe();
-        recipe.setName("Blaubeerkuchen");
-        ArrayList<Recipe> recipes = new ArrayList<>();
-        recipes.add(recipe);
-        recipe.setName("Torte");
-        recipes.add(recipe);
-        mView.showRecipes(recipes);
+    }
+
+    @Override
+    public void loadRecipe(final int recipeId){
+        mRepository.getRecipe(recipeId, new BakeryDataSource.LoadSingleRecipeCallback(){
+
+            @Override
+            public void onRecipeLoaded(final Recipe recipe) {
+                mView.showRecipeDetail(recipe);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                mView.showErrorLoadingRecipes();
+            }
+        });
     }
 
     private class BakeryOverviewCallback implements BakeryDataSource.LoadRecipesCallback{

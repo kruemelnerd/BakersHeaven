@@ -9,4 +9,9 @@ public interface BakeryDataSource {
         void onRecipesLoaded(List<Recipe> recipes);
         void onDataNotAvailable();
     }
+
+    interface LoadSingleRecipeCallback{
+        void onRecipeLoaded(Recipe recipe);
+        void onDataNotAvailable();
+    }
 }

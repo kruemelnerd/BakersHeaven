@@ -9,10 +9,14 @@ public interface OverviewContract {
     interface ViewOps {
         void showRecipes(List<Recipe> recipes);
         void showErrorLoadingRecipes();
+
+        void showRecipeDetail(Recipe recipe);
     }
 
     interface PresenterOps {
         void start();
         void loadRecipes();
+
+        void loadRecipe(int recipeId);
     }
 }
