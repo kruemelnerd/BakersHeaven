@@ -44,7 +44,7 @@ public class OverviewMasterFragment extends Fragment implements OverviewContract
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View mView = inflater.inflate(R.layout.overview_fragment, container, false);
 
-        initRecyclerView(mView, savedInstanceState);
+        initRecyclerView(mView);
 
         BakeryRepository repository = Injection.provideBakeryRepository(mContext);
         presenter = new OverviewPresenter(this, repository);
@@ -61,8 +61,8 @@ public class OverviewMasterFragment extends Fragment implements OverviewContract
 
     }
 
-    private void initRecyclerView(View rootView, Bundle savedInstanceState) {
-        RecyclerView mRecyclerView = rootView.findViewById(R.id.recyclerViewOverview);
+    private void initRecyclerView(View rootView) {
+        RecyclerView recyclerView = rootView.findViewById(R.id.recyclerViewOverview);
 
         mRecipeList = new ArrayList<>();
         mAdapter = new OverviewRecyclerViewAdapter(getActivity(), mRecipeList, new OverviewRecyclerViewAdapter.OnItemClickListener() {
@@ -72,10 +72,10 @@ public class OverviewMasterFragment extends Fragment implements OverviewContract
                 presenter.loadRecipe(position);
             }
         });
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), calculateNoOfColumns(getActivity()));
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setAdapter(mAdapter);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity(), calculateNoOfColumns(getActivity()));
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
 
     }
 

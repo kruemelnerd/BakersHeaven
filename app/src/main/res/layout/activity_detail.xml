@@ -63,6 +63,26 @@
             app:layout_constraintEnd_toEndOf="@+id/detail_serving_number_label"
             app:layout_constraintStart_toStartOf="@+id/detail_serving_number_label"
             app:layout_constraintTop_toTopOf="@+id/detail_ingredients_number" />
+
+        <android.support.v7.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:elevation="3dp"
+            android:layout_margin="@dimen/card_margin"
+            app:layout_constraintEnd_toEndOf="@+id/detail_ingredients_number_label"
+            app:layout_constraintStart_toStartOf="@+id/detail_ingredients_number"
+            app:layout_constraintTop_toBottomOf="@+id/detail_ingredients_number_label">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/detail_recyclerView_ingredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none">
+
+        </android.support.v7.widget.RecyclerView>
+        </android.support.v7.widget.CardView>
+
     </android.support.constraint.ConstraintLayout>
 
 
