@@ -27,11 +27,29 @@ public class Recipe implements Parcelable {
     @SerializedName("steps")
     private List<StepsItem> steps;
 
+
     protected Recipe(Parcel in) {
         image = in.readString();
         servings = in.readInt();
         name = in.readString();
+        ingredients = in.createTypedArrayList(IngredientsItem.CREATOR);
         id = in.readInt();
+        steps = in.createTypedArrayList(StepsItem.CREATOR);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(image);
+        dest.writeInt(servings);
+        dest.writeString(name);
+        dest.writeTypedList(ingredients);
+        dest.writeInt(id);
+        dest.writeTypedList(steps);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
@@ -94,19 +112,6 @@ public class Recipe implements Parcelable {
         return steps;
     }
 
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(image);
-        parcel.writeInt(servings);
-        parcel.writeString(name);
-        parcel.writeInt(id);
-    }
 
 
     @Override

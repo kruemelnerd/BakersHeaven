@@ -11,7 +11,7 @@ import retrofit2.http.GET;
 public class BakeryService {
 
     //private final static String BASE_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/";
-    private final static String BASE_URL = "http://www.mocky.io/v2/5ac52aee2f00002900f5fd82/";
+    private final static String BASE_URL = "http://www.mocky.io/v2/5ad1cf263000004d00534c61/";
 
     public interface BakeryRestClient {
 

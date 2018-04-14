@@ -5,4 +5,10 @@
     <dimen name="card_movie_radius">0dp</dimen>
     <dimen name="card_movie_title_padding">5dp</dimen>
 
+
+    <dimen name="detail_margin_left">8dp</dimen>
+    <dimen name="detail_margin_right">8dp</dimen>
+    <dimen name="detail_serving_label_margin_left">24dp</dimen>
+
+
 </resources>
