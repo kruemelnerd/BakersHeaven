@@ -10,5 +10,7 @@
     <dimen name="detail_margin_right">8dp</dimen>
     <dimen name="detail_serving_label_margin_left">24dp</dimen>
 
-
+    <dimen name="detail_activity_horizontal_margin">16dp</dimen>
+    <dimen name="detail_activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

@@ -28,6 +28,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".overview.OverviewActivity" />
         </activity>
+        <activity android:name=".detail.DetailInformationActivity"
+            android:parentActivityName=".detail.DetailActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".detail.DetailActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -3,6 +3,8 @@
     <string name="title_detailActivity">Recipe</string>
     <string name="detail_serving_label">Servings</string>
     <string name="detail_ingredients_number_label">Ingredients</string>
+    <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
 
+    <string name="detail_step_instruction_label">Instructions</string>
 
 </resources>

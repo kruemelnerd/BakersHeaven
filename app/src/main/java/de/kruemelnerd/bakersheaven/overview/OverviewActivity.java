@@ -6,8 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import de.kruemelnerd.bakersheaven.R;
 import timber.log.Timber;
 
-public class OverviewActivity extends AppCompatActivity{
-
+public class OverviewActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

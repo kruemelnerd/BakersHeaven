@@ -68,7 +68,7 @@ public class OverviewMasterFragment extends Fragment implements OverviewContract
         mAdapter = new OverviewRecyclerViewAdapter(getActivity(), mRecipeList, new OverviewRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Timber.i("Clicked on " + position +". ");
+                Timber.i("Clicked on " + position + ". ");
                 presenter.loadRecipe(position);
             }
         });
@@ -83,6 +83,7 @@ public class OverviewMasterFragment extends Fragment implements OverviewContract
     private static int calculateNoOfColumns(Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+
         int scalingFactor = 180;
         int noOfColumns = (int) (dpWidth / scalingFactor);
         if (noOfColumns < 2)
@@ -108,12 +109,7 @@ public class OverviewMasterFragment extends Fragment implements OverviewContract
 
     @Override
     public void showRecipeDetail(Recipe recipe) {
-        boolean mTwoPane = false;
-        if(mTwoPane){
-
-        }else {
-            launchDetailActivity(recipe);
-        }
+        launchDetailActivity(recipe);
     }
 
     private void launchDetailActivity(Recipe recipe) {
