@@ -2,6 +2,7 @@ package de.kruemelnerd.bakersheaven.detail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -42,19 +43,29 @@ public class DetailStepsAdapter extends RecyclerView.Adapter<DetailStepsAdapter.
         @Override
         public void onClick(View view) {
             StepsItem item = (StepsItem) view.getTag();
-            if(mTwoPane){
-                Timber.i("mTwoPane true" + item.getDescription() );
-            }else {
-                Timber.i("mTwoPane fallse" + item.getDescription() );
+            if (mTwoPane) {
+                Timber.i("mTwoPane true" + item.getDescription());
+
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(DetailInformationFragment.EXTRA_STEP, item);
+                DetailInformationFragment fragment = new DetailInformationFragment();
+                fragment.setArguments(bundle);
+                ((DetailActivity) mContext).getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.item_detail_container, fragment)
+                        .commit();
+
+
+            } else {
+                Timber.i("mTwoPane fallse" + item.getDescription());
                 Context context = view.getContext();
                 Intent intent = new Intent(context, DetailInformationActivity.class);
-                intent.putExtra(DetailInformationActivity.EXTRA_STEP, item);
+                intent.putExtra(DetailInformationFragment.EXTRA_STEP, item);
 
                 context.startActivity(intent);
             }
         }
     };
-
 
 
     public DetailStepsAdapter(Context context, List<StepsItem> steps, final boolean twoPane) {
@@ -91,7 +102,6 @@ public class DetailStepsAdapter extends RecyclerView.Adapter<DetailStepsAdapter.
     public void setSteps(List<StepsItem> mSteps) {
         this.mSteps = mSteps;
     }
-
 
 
 }

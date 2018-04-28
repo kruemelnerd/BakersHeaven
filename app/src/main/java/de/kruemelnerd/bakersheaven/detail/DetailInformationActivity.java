@@ -17,7 +17,7 @@ import de.kruemelnerd.bakersheaven.data.StepsItem;
 
 public class DetailInformationActivity extends AppCompatActivity {
 
-    public static final String EXTRA_STEP = "extra_step";
+
 
     @BindView(R.id.detail_step_image)
     ImageView mStepImage;
@@ -33,7 +33,7 @@ public class DetailInformationActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         if(savedInstanceState == null){
-            StepsItem item = getIntent().getParcelableExtra(EXTRA_STEP);
+            StepsItem item = getIntent().getParcelableExtra(DetailInformationFragment.EXTRA_STEP);
             String instructions = item.getDescription();
             instructions = removeNumber(instructions);
             mStepInstruction.setText(instructions);
