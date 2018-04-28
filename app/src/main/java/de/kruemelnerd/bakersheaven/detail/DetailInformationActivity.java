@@ -14,6 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.kruemelnerd.bakersheaven.R;
 import de.kruemelnerd.bakersheaven.data.StepsItem;
+import de.kruemelnerd.bakersheaven.util.StepUtil;
 
 public class DetailInformationActivity extends AppCompatActivity {
 
@@ -35,7 +36,7 @@ public class DetailInformationActivity extends AppCompatActivity {
         if(savedInstanceState == null){
             StepsItem item = getIntent().getParcelableExtra(DetailInformationFragment.EXTRA_STEP);
             String instructions = item.getDescription();
-            instructions = removeNumber(instructions);
+            instructions = StepUtil.removeFirstNumber(instructions);
             mStepInstruction.setText(instructions);
 
             String thumbnailPath = item.getThumbnailURL();
@@ -50,10 +51,5 @@ public class DetailInformationActivity extends AppCompatActivity {
                     .into(mStepImage);
 
         }
-    }
-
-    private String removeNumber(String instructions) {
-        return instructions.replaceFirst("(^\\d+\\. )", "");
-
     }
 }

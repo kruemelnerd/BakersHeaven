@@ -7,10 +7,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import org.apache.commons.lang.StringUtils;
 
 import de.kruemelnerd.bakersheaven.R;
 import de.kruemelnerd.bakersheaven.data.StepsItem;
+import de.kruemelnerd.bakersheaven.util.StepUtil;
 
 public class DetailInformationFragment extends Fragment {
     public static final String EXTRA_STEP = "extra_step";
@@ -43,6 +49,24 @@ public class DetailInformationFragment extends Fragment {
 
         final TextView stepInstruction = rootView.findViewById(R.id.detail_step_instruction);
         stepInstruction.setText(mStep.getDescription());
+
+        final ImageView stepImage = rootView.findViewById(R.id.detail_step_image);
+
+        String instructions = mStep.getDescription();
+        instructions = StepUtil.removeFirstNumber(instructions);
+        stepInstruction.setText(instructions);
+
+        String thumbnailPath = mStep.getThumbnailURL();
+        if (StringUtils.isBlank(thumbnailPath)) {
+            thumbnailPath = "isEmpty";
+        }
+        Picasso
+                .with(rootView.getContext())
+                .load(thumbnailPath)
+                .fit()
+                .error(R.drawable.ic_chef_round)
+                .into(stepImage);
+
 
         return rootView;
     }
