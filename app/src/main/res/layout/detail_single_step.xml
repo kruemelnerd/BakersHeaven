@@ -33,13 +33,17 @@
                 android:id="@+id/detail_single_step_position"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="1." />
+                tools:text="1."
+                android:layout_marginLeft="@dimen/detail_activity_horizontal_margin"
+                android:layout_marginRight="@dimen/detail_activity_horizontal_margin"/>
 
             <TextView
                 android:id="@+id/detail_single_step_short_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Dies ist eine kurze Beschreibung." />
+                tools:text="Dies ist eine kurze Beschreibung."
+                android:layout_marginRight="@dimen/detail_activity_horizontal_margin"/>
+
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
