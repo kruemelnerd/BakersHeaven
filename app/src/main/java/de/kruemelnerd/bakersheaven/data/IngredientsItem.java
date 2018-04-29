@@ -17,6 +17,9 @@ public class IngredientsItem implements Parcelable{
 	@SerializedName("ingredient")
 	private String ingredient;
 
+	public IngredientsItem() {
+	}
+
 	protected IngredientsItem(Parcel in) {
 		quantity = in.readDouble();
 		measure = in.readString();

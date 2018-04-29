@@ -1,13 +1,13 @@
-package de.kruemelnerd.bakersheaven;
+package de.kruemelnerd.bakersheaven.widget;
 
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.widget.RemoteViews;
 
-import de.kruemelnerd.bakersheaven.overview.OverviewActivity;
+import de.kruemelnerd.bakersheaven.R;
 
 /**
  * Implementation of App Widget functionality.
@@ -20,14 +20,22 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
 
         CharSequence widgetText = RecipeWidgetProviderConfigureActivity.loadTitlePref(context, appWidgetId);
 
+
+
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget_provider);
 
+        Intent svcIntent = new Intent(context, WidgetService.class);
+        svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
+        views.setRemoteAdapter(appWidgetId, R.id.appwidget_ingredients, svcIntent);
+        views.setEmptyView(R.id.appwidget_ingredients, R.id.appwidget_picture);
 
-        Intent intent = new Intent(context, OverviewActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-        views.setOnClickPendingIntent(R.id.appwidget_picture, pendingIntent);
+//        Intent intent = new Intent(context, OverviewActivity.class);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+//
+//        views.setOnClickPendingIntent(R.id.appwidget_ingredients, pendingIntent);
 
 
 

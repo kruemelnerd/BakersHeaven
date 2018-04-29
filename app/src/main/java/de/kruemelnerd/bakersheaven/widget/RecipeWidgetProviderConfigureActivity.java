@@ -1,4 +1,4 @@
-package de.kruemelnerd.bakersheaven;
+package de.kruemelnerd.bakersheaven.widget;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
@@ -8,14 +8,26 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import java.util.List;
+
+import de.kruemelnerd.bakersheaven.R;
+import de.kruemelnerd.bakersheaven.data.Recipe;
+import de.kruemelnerd.bakersheaven.data.source.BakeryRepository;
+import de.kruemelnerd.bakersheaven.data.source.Injection;
+import timber.log.Timber;
 
 /**
  * The configuration screen for the {@link RecipeWidgetProvider RecipeWidgetProvider} AppWidget.
  */
 public class RecipeWidgetProviderConfigureActivity extends Activity {
 
-    private static final String PREFS_NAME = "de.kruemelnerd.bakersheaven.RecipeWidgetProvider";
+    private static final String PREFS_NAME = "de.kruemelnerd.bakersheaven.widget.RecipeWidgetProvider";
     private static final String PREF_PREFIX_KEY = "appwidget_";
+
+    private WidgetPresenter mPresenter;
+
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     EditText mAppWidgetText;
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -75,6 +87,12 @@ public class RecipeWidgetProviderConfigureActivity extends Activity {
         // out of the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED);
 
+
+        BakeryRepository repository = Injection.provideBakeryRepository(this);
+        mPresenter = new WidgetPresenter(this, repository);
+        mPresenter.loadRecipes();
+
+
         setContentView(R.layout.recipe_widget_provider_configure);
         mAppWidgetText = findViewById(R.id.appwidget_text);
         findViewById(R.id.add_button).setOnClickListener(mOnClickListener);
@@ -94,6 +112,12 @@ public class RecipeWidgetProviderConfigureActivity extends Activity {
         }
 
         mAppWidgetText.setText(loadTitlePref(RecipeWidgetProviderConfigureActivity.this, mAppWidgetId));
+    }
+
+
+    public void showRecipes(List<Recipe> recipes) {
+        Timber.i("Recipe loaded: " + recipes.toString());
+        Toast.makeText(this, "Recipe loaded: " + recipes.toString(), Toast.LENGTH_SHORT).show();
     }
 }
 
