@@ -21,7 +21,7 @@ import timber.log.Timber;
 /**
  * The configuration screen for the {@link RecipeWidgetProvider RecipeWidgetProvider} AppWidget.
  */
-public class RecipeWidgetProviderConfigureActivity extends Activity {
+public class RecipeWidgetProviderConfigureActivity extends Activity implements WidgetView {
 
     private static final String PREFS_NAME = "de.kruemelnerd.bakersheaven.widget.RecipeWidgetProvider";
     private static final String PREF_PREFIX_KEY = "appwidget_";

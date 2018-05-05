@@ -3,17 +3,21 @@ package de.kruemelnerd.bakersheaven.widget;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.kruemelnerd.bakersheaven.R;
 import de.kruemelnerd.bakersheaven.data.IngredientsItem;
-import timber.log.Timber;
+import de.kruemelnerd.bakersheaven.data.Recipe;
 
 class ListProvider implements RemoteViewsService.RemoteViewsFactory {
+    public static final String SHARED_WIDGET_RECIPES = "shared_recipes";
     private List<IngredientsItem> mIngredientsList = new ArrayList<>();
     private Context mContext;
     private int mAppWidgetId;
@@ -26,21 +30,16 @@ class ListProvider implements RemoteViewsService.RemoteViewsFactory {
         populateIngredientsList();
     }
 
-    private void populateIngredientsList(){
-        Timber.i("UND ALLE SO YEHA");
+    private void populateIngredientsList() {
 
-        for (int i = 0; i < 10; i++) {
-            IngredientsItem item = new IngredientsItem();
-            item.setIngredient("blabla " + i);
-            item.setMeasure("CUP");
-            item.setQuantity(i);
-            mIngredientsList.add(item);
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences("widget_bakersheaven", Context.MODE_PRIVATE);
 
+        if(sharedPreferences != null){
+            String json = sharedPreferences.getString(SHARED_WIDGET_RECIPES, null);
+            Recipe recipe = json == null ? null : new Gson().fromJson(json, Recipe.class);
+
+            mIngredientsList = recipe.getIngredients();
         }
-
-//        BakeryRepository repository = Injection.provideBakeryRepository(mContext);
-//        mPresenter = new WidgetPresenter(mContext, repository);
-//        mPresenter.loadRecipes();
     }
 
     @Override
@@ -65,7 +64,6 @@ class ListProvider implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public RemoteViews getViewAt(int position) {
-        Timber.i("Test 123");
         final RemoteViews remoteView = new RemoteViews(mContext.getPackageName(), R.layout.widget_list_row);
 
         IngredientsItem item = mIngredientsList.get(position);

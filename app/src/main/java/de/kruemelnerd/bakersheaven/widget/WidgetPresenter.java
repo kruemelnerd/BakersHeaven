@@ -9,10 +9,10 @@ import timber.log.Timber;
 
 public class WidgetPresenter {
 
-    private RecipeWidgetProviderConfigureActivity mWidgetConfigurationView;
+    private WidgetView mWidgetConfigurationView;
     private BakeryRepository mRepository;
 
-    public WidgetPresenter(RecipeWidgetProviderConfigureActivity mWidgetConfigurationView, BakeryRepository mRepository) {
+    public WidgetPresenter(WidgetView mWidgetConfigurationView, BakeryRepository mRepository) {
         this.mWidgetConfigurationView = mWidgetConfigurationView;
         this.mRepository = mRepository;
     }
