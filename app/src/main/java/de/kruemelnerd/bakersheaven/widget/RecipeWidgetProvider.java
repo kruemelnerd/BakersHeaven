@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.widget.RemoteViews;
@@ -19,11 +20,12 @@ import timber.log.Timber;
  */
 public class RecipeWidgetProvider extends AppWidgetProvider {
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+    static RemoteViews updateAppWidget(Context context, int appWidgetId) {
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("widget_bakersheaven_recipe", Context.MODE_PRIVATE);
+        String recipeName = sharedPreferences.getString(UpdateService.SHARED_RECIPE_NAME, null);
 
 
-        // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget_provider);
 
         Intent intent = new Intent(context, WidgetService.class);
@@ -32,16 +34,9 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         views.setRemoteAdapter(appWidgetId, R.id.appwidget_ingredients, intent);
         views.setEmptyView(R.id.appwidget_ingredients, R.id.appwidget_picture);
 
+        views.setTextViewText(R.id.appwidget_headline, recipeName);
 
-//        Intent intent = new Intent(context, OverviewActivity.class);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-//
-//        views.setOnClickPendingIntent(R.id.appwidget_ingredients, pendingIntent);
-
-
-
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
+        return views;
     }
 
 
@@ -49,16 +44,11 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-//        // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
+            RemoteViews remoteViews = updateAppWidget(context, appWidgetId);
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
         }
-
-
-        //if you need to call your service less than 60 sec
-        //answer is here:
-        //http://stackoverflow.com/questions/29998313/how-to-run-background-service-after-every-5-sec-not-working-in-android-5-1
-        Timber.i( "UpdatingWidget: onUpdate");
+        Timber.i("UpdatingWidget: onUpdate");
     }
 
     @Override
@@ -71,15 +61,17 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         if (service == null) {
             service = PendingIntent.getService(context, 0, i, PendingIntent.FLAG_CANCEL_CURRENT);
         }
-        manager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(),  60000, service);
+        manager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), 60000, service);
 
-        Timber.i( "Updating Widget: onReceive");
+        Timber.i("Updating Widget: onReceive");
 
 
         if (intent.getAction().equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+
+            RemoteViews remoteViews = updateAppWidget(context, appWidgetId);
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            updateAppWidget(context, appWidgetManager, appWidgetId);
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
 
         }
     }

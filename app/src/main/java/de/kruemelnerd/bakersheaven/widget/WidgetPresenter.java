@@ -31,7 +31,7 @@ public class WidgetPresenter {
 
         @Override
         public void onDataNotAvailable() {
-            Timber.e("ERROR while loading the recipes for the widget");
+            Timber.e("ERROR while loading the mRecipes for the widget");
         }
     }
 }

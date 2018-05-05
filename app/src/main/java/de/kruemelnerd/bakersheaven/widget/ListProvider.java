@@ -32,13 +32,15 @@ class ListProvider implements RemoteViewsService.RemoteViewsFactory {
 
     private void populateIngredientsList() {
 
-        SharedPreferences sharedPreferences = mContext.getSharedPreferences("widget_bakersheaven", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences("widget_bakersheaven_recipe", Context.MODE_PRIVATE);
 
         if(sharedPreferences != null){
             String json = sharedPreferences.getString(SHARED_WIDGET_RECIPES, null);
             Recipe recipe = json == null ? null : new Gson().fromJson(json, Recipe.class);
 
-            mIngredientsList = recipe.getIngredients();
+            if(recipe != null){
+                mIngredientsList = recipe.getIngredients();
+            }
         }
     }
 

@@ -8,7 +8,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RemoteViews;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+
+import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
 
@@ -30,17 +35,21 @@ public class RecipeWidgetProviderConfigureActivity extends Activity implements W
 
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     EditText mAppWidgetText;
+
+    static List<Recipe> mRecipes;
+
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             final Context context = RecipeWidgetProviderConfigureActivity.this;
 
             // When the button is clicked, store the string locally
-            String widgetText = mAppWidgetText.getText().toString();
-            saveTitlePref(context, mAppWidgetId, widgetText);
+            String recipeNameText = mAppWidgetText.getText().toString();
+            saveRecipeNamePref(context, mAppWidgetId, recipeNameText);
 
             // It is the responsibility of the configuration activity to update the app widget
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            RecipeWidgetProvider.updateAppWidget(context, appWidgetManager, mAppWidgetId);
+            RemoteViews remoteViews = RecipeWidgetProvider.updateAppWidget(context, mAppWidgetId);
+            appWidgetManager.updateAppWidget(mAppWidgetId, remoteViews);
 
             // Make sure we pass back the original appWidgetId
             Intent resultValue = new Intent();
@@ -55,19 +64,46 @@ public class RecipeWidgetProviderConfigureActivity extends Activity implements W
     }
 
     // Write the prefix to the SharedPreferences object for this widget
-    static void saveTitlePref(Context context, int appWidgetId, String text) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putString(PREF_PREFIX_KEY + appWidgetId, text);
-        prefs.apply();
+    static void saveRecipeNamePref(Context context, int appWidgetId, String text) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("widget_bakersheaven_recipe", Context.MODE_PRIVATE);
+        if(sharedPreferences != null){
+            sharedPreferences.edit().putString(UpdateService.SHARED_RECIPE_NAME, text).apply();
+
+            if (StringUtils.isBlank(text)) {
+                Toast.makeText(context, "Did you enter the wrong recipename? Please remove the widget and try again.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Recipe recipe = null;
+
+            for (Recipe singleRecipe : mRecipes) {
+                if(text.toLowerCase().equals(singleRecipe.getName().toLowerCase())){
+                    recipe = singleRecipe;
+                    break;
+                }
+            }
+            if (recipe == null){
+                Toast.makeText(context, "Did you enter the wrong recipename? Please remove the widget and try again.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
+            String json = recipe == null ? null : new Gson().toJson(recipe);
+            sharedPreferences.edit().putString(ListProvider.SHARED_WIDGET_RECIPES, json).apply();
+        }else{
+            Timber.e("Something went wrong with the sharedPreferences?");
+        }
     }
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        setContentView(R.layout.recipe_widget_provider_configure);
 
         // Set the result to CANCELED.  This will cause the widget host to cancel
         // out of the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED);
+
+        mAppWidgetText = findViewById(R.id.appwidget_text);
 
 
         BakeryRepository repository = Injection.provideBakeryRepository(this);
@@ -75,8 +111,6 @@ public class RecipeWidgetProviderConfigureActivity extends Activity implements W
         mPresenter.loadRecipes();
 
 
-        setContentView(R.layout.recipe_widget_provider_configure);
-        mAppWidgetText = findViewById(R.id.appwidget_text);
         findViewById(R.id.add_button).setOnClickListener(mOnClickListener);
 
         // Find the widget id from the intent.
@@ -93,13 +127,19 @@ public class RecipeWidgetProviderConfigureActivity extends Activity implements W
             return;
         }
 
-        mAppWidgetText.setText("TEST");
+        //mAppWidgetText.setText("TEST");
     }
 
 
     public void showRecipes(List<Recipe> recipes) {
         Timber.i("Recipe loaded: " + recipes.toString());
         Toast.makeText(this, recipes.size() + " Recipes loaded", Toast.LENGTH_SHORT).show();
+        if(recipes.size() > 0){
+            // For helping a little
+            mAppWidgetText.setText(recipes.get(0).getName());
+        }
+        mRecipes = recipes;
+
     }
 }
 
