@@ -1,5 +1,7 @@
 package de.kruemelnerd.bakersheaven.detail;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -8,6 +10,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +26,7 @@ import timber.log.Timber;
 public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_RECIPE = "extra_recipe";
+    private final String SAVED_INSTANCE_RECIPE = "saved_instance_recipe";
 
     private boolean mTwoPane;
     private List<IngredientsItem> mIngredientsList;
@@ -29,6 +34,8 @@ public class DetailActivity extends AppCompatActivity {
 
     private List<StepsItem> mStepsList;
     private DetailStepsAdapter mStepsAdapter;
+    private Recipe recipe;
+    private SharedPreferences sharedPreferences;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,12 +44,28 @@ public class DetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null){
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        Recipe recipe = getIntent().getParcelableExtra(EXTRA_RECIPE);
+        sharedPreferences = this.getSharedPreferences(
+                this.getLocalClassName(), Context.MODE_PRIVATE);
 
+        if (savedInstanceState == null) {
+            recipe = getIntent().getParcelableExtra(EXTRA_RECIPE);
+
+
+        } else {
+            recipe = savedInstanceState.getParcelable(SAVED_INSTANCE_RECIPE);
+        }
+
+        if (recipe == null) {
+            String json = sharedPreferences.getString("recipe", null);
+            recipe =  json == null ? null : new Gson().fromJson(json, Recipe.class);
+        }else {
+            String json = recipe == null ? null : new Gson().toJson(recipe);
+            sharedPreferences.edit().putString("recipe", json).apply();
+        }
         Timber.i("Recipe: " + recipe.toString());
 
         this.mTwoPane = findViewById(R.id.item_detail_container) != null;
@@ -50,9 +73,15 @@ public class DetailActivity extends AppCompatActivity {
         initIngredientRecyclerView(recipe);
         initStepsRecyclerView(recipe);
 
-        if (savedInstanceState == null) {
 
-        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(SAVED_INSTANCE_RECIPE, recipe);
+        super.onSaveInstanceState(outState);
+
+
     }
 
     private void initStepsRecyclerView(Recipe recipe) {
@@ -74,7 +103,7 @@ public class DetailActivity extends AppCompatActivity {
         mStepsAdapter.notifyDataSetChanged();
     }
 
-    private void initIngredientRecyclerView(Recipe recipe){
+    private void initIngredientRecyclerView(Recipe recipe) {
         mIngredientsList = new ArrayList<>();
         mIngredientsAdapter = new DetailIngredientsAdapter(this, mIngredientsList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -89,7 +118,8 @@ public class DetailActivity extends AppCompatActivity {
 
         showIngredients(recipe.getIngredients());
     }
-    public void showIngredients(List<IngredientsItem> ingredients){
+
+    public void showIngredients(List<IngredientsItem> ingredients) {
         mIngredientsList = ingredients;
         mIngredientsAdapter.setIngredients(mIngredientsList);
         mIngredientsAdapter.notifyDataSetChanged();

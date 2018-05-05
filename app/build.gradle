@@ -29,6 +29,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
 
+    implementation 'com.google.android.exoplayer:exoplayer:2.7.3'
     implementation 'commons-lang:commons-lang:2.6'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.jakewharton.timber:timber:4.7.0'

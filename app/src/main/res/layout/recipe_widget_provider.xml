@@ -1,0 +1,28 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#09C"
+    android:orientation="vertical"
+    android:padding="@dimen/widget_margin">
+    <TextView
+        android:id="@+id/appwidget_headline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="title"
+        android:textColor="@android:color/white"/>
+
+    <ListView
+        android:id="@+id/appwidget_ingredients"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/appwidget_picture"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:src="@drawable/ic_chef_logo" />
+
+
+</LinearLayout>

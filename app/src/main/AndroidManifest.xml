@@ -18,22 +18,43 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".detail.DetailActivity"
             android:label="@string/title_detailActivity"
             android:parentActivityName=".overview.OverviewActivity">
+
             <!-- The meta-data element is needed for versions lower than 4.1 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".overview.OverviewActivity" />
         </activity>
-        <activity android:name=".detail.DetailInformationActivity"
+        <activity
+            android:name=".detail.DetailInformationActivity"
             android:parentActivityName=".detail.DetailActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".detail.DetailActivity" />
         </activity>
+
+        <receiver android:name=".widget.RecipeWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/recipe_widget_provider_info" />
+        </receiver>
+
+        <activity android:name=".widget.RecipeWidgetProviderConfigureActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".widget.WidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

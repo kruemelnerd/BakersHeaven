@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:background="@android:color/white">
+
+
+
+    <TextView
+        android:id="@+id/widget_ingredient_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/detail_margin_left"
+        android:layout_marginStart="@dimen/detail_margin_left"
+        android:layout_marginRight="@dimen/detail_margin_right"
+        android:layout_marginEnd="@dimen/detail_margin_right"
+        android:layout_alignParentLeft="true"
+        tools:text="50"
+        />
+
+    <TextView
+        android:id="@+id/widget_ingredient_measure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/detail_margin_left"
+        android:layout_marginStart="@dimen/detail_margin_left"
+        android:layout_marginRight="@dimen/detail_margin_right"
+        android:layout_marginEnd="@dimen/detail_margin_right"
+
+        android:layout_toRightOf="@id/widget_ingredient_quantity"
+        tools:text="Cup" />
+
+    <TextView
+        android:id="@+id/widget_ingredient_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/detail_margin_left"
+        android:layout_marginStart="@dimen/detail_margin_left"
+        android:layout_marginRight="@dimen/detail_margin_right"
+        android:layout_marginEnd="@dimen/detail_margin_right"
+
+        android:layout_toRightOf="@id/widget_ingredient_measure"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        tools:text="Nutella or other chocolate-hazelnut spread"
+        />
+
+</RelativeLayout>
