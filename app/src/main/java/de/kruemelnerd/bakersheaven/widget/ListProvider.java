@@ -1,6 +1,5 @@
 package de.kruemelnerd.bakersheaven.widget;
 
-import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,15 +17,14 @@ import de.kruemelnerd.bakersheaven.data.Recipe;
 
 class ListProvider implements RemoteViewsService.RemoteViewsFactory {
     public static final String SHARED_WIDGET_RECIPES = "shared_recipes";
+    public static final String SHARED_RECIPE_NAME = "shared_recipe_name";
+
     private List<IngredientsItem> mIngredientsList = new ArrayList<>();
     private Context mContext;
-    private int mAppWidgetId;
 
-    private WidgetPresenter mPresenter;
 
     public ListProvider(Context context, Intent intent) {
         this.mContext = context;
-        this.mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         populateIngredientsList();
     }
 
@@ -34,11 +32,11 @@ class ListProvider implements RemoteViewsService.RemoteViewsFactory {
 
         SharedPreferences sharedPreferences = mContext.getSharedPreferences("widget_bakersheaven_recipe", Context.MODE_PRIVATE);
 
-        if(sharedPreferences != null){
+        if (sharedPreferences != null) {
             String json = sharedPreferences.getString(SHARED_WIDGET_RECIPES, null);
             Recipe recipe = json == null ? null : new Gson().fromJson(json, Recipe.class);
 
-            if(recipe != null){
+            if (recipe != null) {
                 mIngredientsList = recipe.getIngredients();
             }
         }

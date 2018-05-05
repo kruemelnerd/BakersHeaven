@@ -7,7 +7,7 @@
 
     <string name="detail_step_instruction_label">Instructions</string>
     <string name="appwidget_text">EXAMPLE</string>
-    <string name="configure">Configure</string>
-    <string name="add_widget">Add widget</string>
+    <string name="configure">Please enter the Name of the recipe you want to display:</string>
+    <string name="add_widget">Show widget</string>
 
 </resources>

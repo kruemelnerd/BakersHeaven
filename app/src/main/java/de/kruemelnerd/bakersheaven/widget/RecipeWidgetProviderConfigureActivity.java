@@ -28,15 +28,16 @@ import timber.log.Timber;
  */
 public class RecipeWidgetProviderConfigureActivity extends Activity implements WidgetView {
 
-    private static final String PREFS_NAME = "de.kruemelnerd.bakersheaven.widget.RecipeWidgetProvider";
-    private static final String PREF_PREFIX_KEY = "appwidget_";
-
     private WidgetPresenter mPresenter;
 
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     EditText mAppWidgetText;
 
     static List<Recipe> mRecipes;
+
+    public RecipeWidgetProviderConfigureActivity() {
+        super();
+    }
 
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
@@ -59,15 +60,12 @@ public class RecipeWidgetProviderConfigureActivity extends Activity implements W
         }
     };
 
-    public RecipeWidgetProviderConfigureActivity() {
-        super();
-    }
 
     // Write the prefix to the SharedPreferences object for this widget
     static void saveRecipeNamePref(Context context, int appWidgetId, String text) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("widget_bakersheaven_recipe", Context.MODE_PRIVATE);
-        if(sharedPreferences != null){
-            sharedPreferences.edit().putString(UpdateService.SHARED_RECIPE_NAME, text).apply();
+        if (sharedPreferences != null) {
+            sharedPreferences.edit().putString(ListProvider.SHARED_RECIPE_NAME, text).apply();
 
             if (StringUtils.isBlank(text)) {
                 Toast.makeText(context, "Did you enter the wrong recipename? Please remove the widget and try again.", Toast.LENGTH_SHORT).show();
@@ -76,12 +74,12 @@ public class RecipeWidgetProviderConfigureActivity extends Activity implements W
             Recipe recipe = null;
 
             for (Recipe singleRecipe : mRecipes) {
-                if(text.toLowerCase().equals(singleRecipe.getName().toLowerCase())){
+                if (text.toLowerCase().equals(singleRecipe.getName().toLowerCase())) {
                     recipe = singleRecipe;
                     break;
                 }
             }
-            if (recipe == null){
+            if (recipe == null) {
                 Toast.makeText(context, "Did you enter the wrong recipename? Please remove the widget and try again.", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -89,7 +87,7 @@ public class RecipeWidgetProviderConfigureActivity extends Activity implements W
 
             String json = recipe == null ? null : new Gson().toJson(recipe);
             sharedPreferences.edit().putString(ListProvider.SHARED_WIDGET_RECIPES, json).apply();
-        }else{
+        } else {
             Timber.e("Something went wrong with the sharedPreferences?");
         }
     }
@@ -126,15 +124,12 @@ public class RecipeWidgetProviderConfigureActivity extends Activity implements W
             finish();
             return;
         }
-
-        //mAppWidgetText.setText("TEST");
     }
 
 
     public void showRecipes(List<Recipe> recipes) {
-        Timber.i("Recipe loaded: " + recipes.toString());
-        Toast.makeText(this, recipes.size() + " Recipes loaded", Toast.LENGTH_SHORT).show();
-        if(recipes.size() > 0){
+        Timber.d("Recipe loaded: " + recipes.toString() + " Number of Recipes loaded: " + recipes.size());
+        if (recipes.size() > 0) {
             // For helping a little
             mAppWidgetText.setText(recipes.get(0).getName());
         }

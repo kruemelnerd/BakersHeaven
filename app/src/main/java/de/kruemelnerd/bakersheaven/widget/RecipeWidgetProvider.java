@@ -1,15 +1,14 @@
 package de.kruemelnerd.bakersheaven.widget;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.SystemClock;
 import android.widget.RemoteViews;
+
+import org.apache.commons.lang.StringUtils;
 
 import de.kruemelnerd.bakersheaven.R;
 import timber.log.Timber;
@@ -23,7 +22,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
     static RemoteViews updateAppWidget(Context context, int appWidgetId) {
 
         SharedPreferences sharedPreferences = context.getSharedPreferences("widget_bakersheaven_recipe", Context.MODE_PRIVATE);
-        String recipeName = sharedPreferences.getString(UpdateService.SHARED_RECIPE_NAME, null);
+        String recipeName = sharedPreferences.getString(ListProvider.SHARED_RECIPE_NAME, null);
 
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget_provider);
@@ -34,13 +33,12 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         views.setRemoteAdapter(appWidgetId, R.id.appwidget_ingredients, intent);
         views.setEmptyView(R.id.appwidget_ingredients, R.id.appwidget_picture);
 
-        views.setTextViewText(R.id.appwidget_headline, recipeName);
+        if (StringUtils.isNotBlank(recipeName)) {
+            views.setTextViewText(R.id.appwidget_headline, recipeName);
+        }
 
         return views;
     }
-
-
-    private PendingIntent service;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -54,17 +52,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-
-        final AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        final Intent i = new Intent(context, UpdateService.class);
-
-        if (service == null) {
-            service = PendingIntent.getService(context, 0, i, PendingIntent.FLAG_CANCEL_CURRENT);
-        }
-        manager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), 60000, service);
-
         Timber.i("Updating Widget: onReceive");
-
 
         if (intent.getAction().equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);

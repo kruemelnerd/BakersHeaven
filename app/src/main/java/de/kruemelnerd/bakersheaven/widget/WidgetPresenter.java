@@ -17,16 +17,16 @@ public class WidgetPresenter {
         this.mRepository = mRepository;
     }
 
-    public void loadRecipes(){
+    public void loadRecipes() {
         mRepository.getRecipes(new WidgetLoadAllRecipesCallback());
     }
 
 
-    private class WidgetLoadAllRecipesCallback implements BakeryDataSource.LoadRecipesCallback{
+    private class WidgetLoadAllRecipesCallback implements BakeryDataSource.LoadRecipesCallback {
 
         @Override
         public void onRecipesLoaded(List<Recipe> recipes) {
-          mWidgetConfigurationView.showRecipes(recipes);
+            mWidgetConfigurationView.showRecipes(recipes);
         }
 
         @Override
