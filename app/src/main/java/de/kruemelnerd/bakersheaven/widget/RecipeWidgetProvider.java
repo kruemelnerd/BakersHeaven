@@ -18,9 +18,6 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        CharSequence widgetText = RecipeWidgetProviderConfigureActivity.loadTitlePref(context, appWidgetId);
-
-
 
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget_provider);
@@ -51,13 +48,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         }
     }
 
-    @Override
-    public void onDeleted(Context context, int[] appWidgetIds) {
-        // When the user deletes the widget, delete the preference associated with it.
-        for (int appWidgetId : appWidgetIds) {
-            RecipeWidgetProviderConfigureActivity.deleteTitlePref(context, appWidgetId);
-        }
-    }
+
 
     @Override
     public void onEnabled(Context context) {

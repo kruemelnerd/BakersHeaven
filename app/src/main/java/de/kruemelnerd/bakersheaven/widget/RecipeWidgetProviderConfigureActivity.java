@@ -61,24 +61,6 @@ public class RecipeWidgetProviderConfigureActivity extends Activity {
         prefs.apply();
     }
 
-    // Read the prefix from the SharedPreferences object for this widget.
-    // If there is no preference saved, get the default from a resource
-    static String loadTitlePref(Context context, int appWidgetId) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        String titleValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null);
-        if (titleValue != null) {
-            return titleValue;
-        } else {
-            return context.getString(R.string.appwidget_text);
-        }
-    }
-
-    static void deleteTitlePref(Context context, int appWidgetId) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.remove(PREF_PREFIX_KEY + appWidgetId);
-        prefs.apply();
-    }
-
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -111,13 +93,13 @@ public class RecipeWidgetProviderConfigureActivity extends Activity {
             return;
         }
 
-        mAppWidgetText.setText(loadTitlePref(RecipeWidgetProviderConfigureActivity.this, mAppWidgetId));
+        mAppWidgetText.setText("TEST");
     }
 
 
     public void showRecipes(List<Recipe> recipes) {
         Timber.i("Recipe loaded: " + recipes.toString());
-        Toast.makeText(this, "Recipe loaded: " + recipes.toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, recipes.size() + " Recipes loaded", Toast.LENGTH_SHORT).show();
     }
 }
 
