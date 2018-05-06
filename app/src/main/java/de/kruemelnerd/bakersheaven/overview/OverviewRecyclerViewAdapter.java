@@ -5,6 +5,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,7 +71,7 @@ public class OverviewRecyclerViewAdapter extends RecyclerView.Adapter<OverviewRe
         holder.recipeId = recipe.getId();
         holder.title.setText(recipe.getName());
         String imageUrl = recipe.getImage();
-        if (imageUrl == null || imageUrl.length() == 0) {
+        if (TextUtils.isEmpty(imageUrl)) {
             imageUrl = "xxx";
            // holder.image.setBackgroundColor(mContext.getColor(R.color.cardview_background_color));
         }
