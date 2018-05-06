@@ -11,8 +11,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +19,7 @@ import de.kruemelnerd.bakersheaven.R;
 import de.kruemelnerd.bakersheaven.data.IngredientsItem;
 import de.kruemelnerd.bakersheaven.data.Recipe;
 import de.kruemelnerd.bakersheaven.data.StepsItem;
+import de.kruemelnerd.bakersheaven.util.JsonUtil;
 import timber.log.Timber;
 
 public class DetailActivity extends AppCompatActivity {
@@ -61,10 +60,14 @@ public class DetailActivity extends AppCompatActivity {
 
         if (recipe == null) {
             String json = sharedPreferences.getString("recipe", null);
-            recipe =  json == null ? null : new Gson().fromJson(json, Recipe.class);
+            try {
+                recipe = JsonUtil.deSerialize(json, Recipe.class);
+            } catch (ClassNotFoundException e) {
+
+                Timber.e("Class not found: " + e.getMessage());
+            }
         }else {
-            String json = recipe == null ? null : new Gson().toJson(recipe);
-            sharedPreferences.edit().putString("recipe", json).apply();
+            sharedPreferences.edit().putString("recipe", JsonUtil.serialize(recipe)).apply();
         }
         Timber.i("Recipe: " + recipe.toString());
 
