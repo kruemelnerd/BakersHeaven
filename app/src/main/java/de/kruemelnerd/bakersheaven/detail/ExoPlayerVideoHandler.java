@@ -19,6 +19,7 @@ import com.google.android.exoplayer2.util.Util;
 
 public class ExoPlayerVideoHandler {
     private static ExoPlayerVideoHandler instance;
+    private long mPlaybackPosition;
 
     public static ExoPlayerVideoHandler getInstance() {
         if (instance == null) {
@@ -29,7 +30,7 @@ public class ExoPlayerVideoHandler {
 
     private SimpleExoPlayer player;
     private Uri playerUri;
-    private boolean isPlayerPlaying;
+    private boolean isPlayerPlaying = true;
 
     /**
      * use getInstance()
@@ -56,20 +57,20 @@ public class ExoPlayerVideoHandler {
                         context, userAgent), new DefaultExtractorsFactory(), null, null);
                 // Prepare the player with the source.
                 player.prepare(mediaSource);
-                player.setPlayWhenReady(true);
+                player.setPlayWhenReady(isPlayerPlaying);
 
             }
             player.clearVideoSurface();
-            player.setVideoSurfaceView(
-                    (SurfaceView) exoPlayerView.getVideoSurfaceView());
-            player.seekTo(player.getCurrentPosition() + 1);
+            player.setVideoSurfaceView((SurfaceView) exoPlayerView.getVideoSurfaceView());
+            player.seekTo(mPlaybackPosition);
             exoPlayerView.setPlayer(player);
-            isPlayerPlaying = true;
         }
     }
 
     public void releaseVideoPlayer() {
         if (player != null) {
+            mPlaybackPosition =  player.getCurrentPosition();
+            player.stop();
             player.release();
         }
         player = null;
@@ -88,4 +89,19 @@ public class ExoPlayerVideoHandler {
         }
     }
 
+    public long getPlaybackPosition() {
+        return mPlaybackPosition;
+    }
+
+    public void setPlaybackPosition(long playbackPosition) {
+        this.mPlaybackPosition = playbackPosition;
+    }
+
+    public boolean isPlayerPlaying() {
+        return isPlayerPlaying;
+    }
+
+    public void setPlayerPlaying(boolean playerPlaying) {
+        isPlayerPlaying = playerPlaying;
+    }
 }
