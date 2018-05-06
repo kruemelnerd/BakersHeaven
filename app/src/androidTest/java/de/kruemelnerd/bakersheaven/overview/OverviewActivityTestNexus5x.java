@@ -28,13 +28,13 @@ import static org.hamcrest.Matchers.allOf;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class OverviewActivityTest {
+public class OverviewActivityTestNexus5x {
 
     @Rule
     public ActivityTestRule<OverviewActivity> mActivityTestRule = new ActivityTestRule<>(OverviewActivity.class);
 
     @Test
-    public void overviewActivityTest() {
+    public void overviewActivityTestNexus5x() {
         ViewInteraction textView = onView(
                 allOf(withId(R.id.overview_recipe_title), withText("Nutella Pie"),
                         childAtPosition(
