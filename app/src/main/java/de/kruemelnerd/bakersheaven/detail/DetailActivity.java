@@ -60,12 +60,7 @@ public class DetailActivity extends AppCompatActivity {
 
         if (recipe == null) {
             String json = sharedPreferences.getString("recipe", null);
-            try {
-                recipe = JsonUtil.deSerialize(json, Recipe.class);
-            } catch (ClassNotFoundException e) {
-
-                Timber.e("Class not found: " + e.getMessage());
-            }
+            recipe = JsonUtil.deSerialize(json, Recipe.class);
         }else {
             sharedPreferences.edit().putString("recipe", JsonUtil.serialize(recipe)).apply();
         }

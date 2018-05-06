@@ -8,7 +8,8 @@
     android:showDividers="middle"
     tools:context=".detail.DetailActivity">
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="400dp"
         android:layout_height="match_parent"
@@ -47,7 +48,7 @@
 
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
     <FrameLayout
          android:id="@+id/item_detail_container"
